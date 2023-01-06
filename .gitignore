@@ -47,6 +47,7 @@ playground.xcworkspace
 # .swiftpm
 
 .build/
+Package.resolved
 
 # CocoaPods
 #
@@ -81,6 +82,11 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# macOS
+
+.DS_Store
+IDEWorkspaceChecks.plist
 
 # Code Injection
 #
