@@ -1,10 +1,3 @@
-//
-//  ReuseIdentifier.swift
-//  NewsApp
-//
-//  Created by Кирилл Полосов on 06.01.2023.
-//
-
 import UIKit
 
 protocol ReuseIdentifiable {
@@ -33,6 +26,10 @@ extension UICollectionView {
             fatalError("fuck can't dequeue")
         }
         return cell
+    }
+
+    func register<T: UICollectionViewCell>(_ cellType: T.Type) {
+        self.register(cellType, forCellWithReuseIdentifier: cellType.reuseIdentifier)
     }
 }
 
