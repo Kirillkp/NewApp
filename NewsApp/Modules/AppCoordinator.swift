@@ -26,6 +26,7 @@ class AppCoordinator {
 }
 
 private extension AppCoordinator {
+    
     func setupFeed() {
         guard let navController = self.navigationControllers[.feed] else {
             fatalError("can't find navController")

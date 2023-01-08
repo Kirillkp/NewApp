@@ -9,26 +9,9 @@ class FeedCardView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(self.imageView)
-        self.addSubview(self.infoLabel)
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.shortDescriptionLabel)
-        self.layer.cornerRadius = 10
-        self.layer.masksToBounds = true
-
-        self.titleLabel.numberOfLines = 3
-        self.shortDescriptionLabel.numberOfLines = 2
-
-        self.infoLabel.font = Font.system(ofSize: 14, weight: .medium)
-        self.infoLabel.textColor = .white
-
-        self.titleLabel.font = Font.system(ofSize: 24, weight: .bold)
-        self.titleLabel.textColor = .white
-
-        self.shortDescriptionLabel.font = Font.system(ofSize: 16, weight: .regular)
-        self.shortDescriptionLabel.textColor = UIColor.rgba(158, 158, 158)
-
-        self.imageView.contentMode = .scaleAspectFill
+        
+        self.addSubviews()
+        self.configureLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,6 +20,29 @@ class FeedCardView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.addFrames()
+    }
+
+    func update(with viewModel: FeedCardViewModel) {
+        self.infoLabel.text = viewModel.info
+        self.titleLabel.text = viewModel.title
+        self.shortDescriptionLabel.text = viewModel.shortDescription
+        self.imageView.setImage(with: URL(string: viewModel.imageName))
+        self.setNeedsLayout()
+    }
+}
+
+private extension FeedCardView {
+    
+    func addSubviews() {
+        self.addSubview(self.imageView)
+        self.addSubview(self.infoLabel)
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.shortDescriptionLabel)
+    }
+    
+    func addFrames() {
         let maxLabelWidth = self.frame.width - Constants.margin * 2
         let maxLabelSize = CGSize(width: maxLabelWidth, height: .greatestFiniteMagnitude)
 
@@ -58,17 +64,29 @@ class FeedCardView: UIView {
 
         self.imageView.frame = self.frame
     }
+    
+    func configureLayout() {
+        self.layer.cornerRadius = 10
+        self.layer.masksToBounds = true
 
-    func update(with viewModel: FeedCardViewModel) {
-        self.infoLabel.text = viewModel.info
-        self.titleLabel.text = viewModel.title
-        self.shortDescriptionLabel.text = viewModel.shortDescription
-        self.imageView.setImage(with: URL(string: viewModel.imageName))
-        self.setNeedsLayout()
+        self.titleLabel.numberOfLines = 3
+        self.shortDescriptionLabel.numberOfLines = 2
+
+        self.infoLabel.font = Font.system(ofSize: 14, weight: .medium)
+        self.infoLabel.textColor = .white
+
+        self.titleLabel.font = Font.system(ofSize: 24, weight: .bold)
+        self.titleLabel.textColor = .white
+
+        self.shortDescriptionLabel.font = Font.system(ofSize: 16, weight: .regular)
+        self.shortDescriptionLabel.textColor = UIColor.rgba(158, 158, 158)
+
+        self.imageView.contentMode = .scaleAspectFill
     }
 }
 
 private struct Constants {
     static let margin: CGFloat = 24
     static let titleMarginBottom: CGFloat = 8
+    static let activityIndicatorSize: CGSize = CGSize(width: 20, height: 20)
 }

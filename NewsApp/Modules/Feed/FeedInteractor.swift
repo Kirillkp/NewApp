@@ -25,7 +25,7 @@ extension FeedInteractor: FeedInteractorInput {
 
 private extension FeedInteractor {
 	func load() {
-		let params = ArticlesRequestParams(pageSize: 20, page: self.page, search: "world")
+		let params = ArticlesRequestParams(pageSize: 20, page: self.page, search: "film")
 		self.articlesNetworkService.requestArticles(params: params) { [weak self] result in
 			guard let self = self else { return }
 			switch result {
