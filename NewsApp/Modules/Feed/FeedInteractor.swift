@@ -1,6 +1,7 @@
 import Foundation
 
 final class FeedInteractor {
+    
 	weak var output: FeedInteractorOutput?
 
 	private let articlesNetworkService: ArticlesNetworkProtocol
@@ -13,6 +14,7 @@ final class FeedInteractor {
 }
 
 extension FeedInteractor: FeedInteractorInput {
+    
 	func reload() {
 		self.page = Constants.initialPage
 		self.load()
@@ -24,8 +26,9 @@ extension FeedInteractor: FeedInteractorInput {
 }
 
 private extension FeedInteractor {
+    
 	func load() {
-		let params = ArticlesRequestParams(pageSize: 20, page: self.page, search: "film")
+		let params = ArticlesRequestParams(pageSize: 20, page: self.page, search: "world")
 		self.articlesNetworkService.requestArticles(params: params) { [weak self] result in
 			guard let self = self else { return }
 			switch result {

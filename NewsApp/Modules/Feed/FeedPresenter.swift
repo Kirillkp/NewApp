@@ -1,6 +1,7 @@
 import Foundation
 
 final class FeedPresenter {
+    
     weak var view: FeedViewInput?
     weak var moduleOutput: FeedModuleOutput?
 
@@ -19,9 +20,11 @@ final class FeedPresenter {
 }
 
 extension FeedPresenter: FeedModuleInput {
+    
 }
 
 extension FeedPresenter: FeedViewOutput {
+    
     func viewDidLoad() {
         self.isReloading = true
         self.interactor.reload()
@@ -43,6 +46,7 @@ extension FeedPresenter: FeedViewOutput {
 }
 
 extension FeedPresenter: FeedInteractorOutput {
+    
     func didEncounterError(_ error: Error) {
         // TODO: implement error handling
     }

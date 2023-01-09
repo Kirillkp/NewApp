@@ -1,8 +1,10 @@
 import UIKit
 
 final class FeedViewController: UIViewController {
+    
     private let output: FeedViewOutput
     private let collectionView: UICollectionView
+    private let refreshControl = UIRefreshControl()
 
     private var viewModels = [FeedCardViewModel]()
 
@@ -18,28 +20,33 @@ final class FeedViewController: UIViewController {
     }
 
     override func loadView() {
-        let view = UIView()
-        view.addSubview(self.collectionView)
+        super.loadView()
+
+        self.addSubviews()
         self.setupCollectionView()
-        self.view = view
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.collectionView.frame = self.view.bounds
+        
+        self.addFrame()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.output.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = BlockBarButtonItem.item(title: Localization.loginButton, style: .plain, handler: { [weak self] in
+        self.addTarget()
+        self.output.viewDidLoad()
+        self.navigationItem.rightBarButtonItem = BlockBarButtonItem.item(title: Localization.loginButton,
+                                                                         style: .plain,
+                                                                         handler: { [weak self] in
             self?.output.onLoginTap()
         })
     }
 }
 
 extension FeedViewController: FeedViewInput {
+    
     func set(viewModels: [FeedCardViewModel]) {
         self.viewModels = viewModels
         self.collectionView.reloadData()
@@ -47,6 +54,7 @@ extension FeedViewController: FeedViewInput {
 }
 
 extension FeedViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.viewModels.count
     }
@@ -61,6 +69,7 @@ extension FeedViewController: UICollectionViewDataSource {
 }
 
 extension FeedViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -74,15 +83,37 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         self.output.willDisplay(at: indexPath.item)
+        
     }
 }
 
 private extension FeedViewController {
+    
+    func addSubviews() {
+        view.addSubview(self.collectionView)
+    }
+    
+    func addFrame() {
+        self.collectionView.frame = self.view.bounds
+    }
+    
     func setupCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.register(FeedViewCell<FeedCardView>.self)
+        self.collectionView.refreshControl = refreshControl
         self.collectionView.backgroundColor = .white
         self.collectionView.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    }
+    
+    func addTarget() {
+        refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
+    }
+    
+    @objc
+    func refreshCollectionView(_ sender: UIRefreshControl) {
+        self.output.viewDidLoad()
+        self.collectionView.reloadData()
+        sender.endRefreshing()
     }
 }
